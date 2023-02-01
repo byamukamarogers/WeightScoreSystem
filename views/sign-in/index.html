@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <link rel="icon" href="../../../../favicon.ico" />
+
+  <title>Signin Template for Bootstrap</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../bootstrap.min.css" rel="stylesheet" />
+  <script src="../bootstrap.min.js"></script>
+  <script src="../ajax.min.js"></script>
+
+  <!-- Custom styles for this template -->
+  <link href="signin.css" rel="stylesheet" />
+</head>
+
+<body class="text-center">
+  <div class="form-signin">
+    <div class="login-form">
+      <div class="card p-5">
+        <div class="">
+          <img src="" width="150" height="150" alt="SYSTEM LOGO" class="img-thumbnail img-responsive" />
+          <h3>System Login</h3>
+          <p>Please enter your username and password</p>
+        </div>
+        <form id="Login" action="" method="POST">
+          <div class="form-group">
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" />
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" />
+          </div>
+          <div class="forgot pb-1">
+            <a class="text-primary" href="/forgotpassword">Forgot password?
+            </a>
+          </div>
+          <div id="msg" class="form-group">
+            <div class="alert alert-danger" data-dismiss="alert" role="alert">
+              <strong>Warning!</strong> Username or Password Incorrect.
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12 col-md-4 col-lg-4">
+              <button type="submit" class="btn btn-success btn-default">
+                Login
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <p class="botto-text text-dark p-2">&copy; Smart Care 2022</p>
+    </div>
+  </div>
+  <script>
+      $(document).ready(function () {
+          $("#msg").hide();
+          $('form').on('submit', function (event) {
+              event.preventDefault();
+              let username = $('#username').val();
+              let password = $('#password').val();
+              let formData = { username: username, password: password };
+              let userEmail = $("#email").val();
+              $.ajax({
+                  type: "POST",
+                  url: "/login",
+                  data: formData,
+                  dataType: "json",
+                  encode: true,
+              }).done(function (data, error) {
+                  if (error) {
+                  }
+                  if (data.loginStatus) {
+                      $("#msg").hide();
+                      window.location.href = '/';
+                  } else {
+                      $("#msg").show();
+                      $("#msg").delay(5000).hide(0);
+                  }
+              });
+          });
+      });
+  </script>
+</body>
+
+</html>

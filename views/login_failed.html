@@ -1,0 +1,34 @@
+<html>
+<head>
+    <link href="./bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="./bootstrap.min.js"></script>
+    <!----script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script-->
+    <link href = "./login.css" rel = "stylesheet" id = "nlts-stylesheet">
+</head>
+<body id="LoginForm">
+    <div class="container">
+        <h1 class="form-heading">E-Health</h1>
+        <div class="login-form">
+            <div class="main-div">
+                <div class="panel">
+                    <h2>System Login Failure</h2>
+                    <p>Wrong username and (or) password</p>
+                </div>
+                <form id="Login" action="/login" method="POST">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name = "username" id="inputEmail" placeholder="User name">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name = "password" id="inputPassword" placeholder="Password">
+                    </div>
+                    <div class="forgot">
+                        <a href="reset.html">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

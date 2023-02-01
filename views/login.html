@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link href="./bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
+    <script src="./bootstrap.min.js"></script>
+    <script src="./ajax.min.js"></script>
+    <link href="sign-in/signin.css" rel="stylesheet" />
+    <title>R3HealthCare System :: Login</title>
+</head>
+
+<body class="text-center">
+    <div class="form-signin">
+        <div class="login-form">
+            <div class="card p-5">
+                <div class="">
+                    <img src="logo.png" width="200" height="80" alt="SYSTEM LOGO" class="img-thumbnail img-responsive" />
+                    <h3>System Login</h3>
+                </div>
+                <form id="Login" action="" method="POST">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Username" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password" id="password"
+                            placeholder="Password" />
+                    </div>
+                    <div class="forgot pb-1">
+                        <a class="text-primary" href="/forgotpassword">Forgot password?
+                        </a>
+                    </div>
+                    <div id="msg" class="form-group">
+                        <div class="alert alert-danger" data-dismiss="alert" role="alert">
+                            <strong>Warning!</strong> Username or Password Incorrect.
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 mx-auto">
+                            <button type="submit" class="btn btn-success btn-block">
+                                Login
+                            </button>
+                        </div>
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#msg").hide();
+            $("form").on("submit", function (event) {
+                event.preventDefault();
+                let username = $("#username").val();
+                let password = $("#password").val();
+                let formData = { username: username, password: password };
+                let userEmail = $("#email").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/login",
+                    data: formData,
+                    dataType: "json",
+                    encode: true,
+                }).done(function (data, error) {
+                    if (error) {
+                    }
+                    if (data.loginStatus) {
+                        $("#msg").hide();
+                        window.location.href = "/";
+                    } else {
+                        $("#msg").show();
+                        $("#msg").delay(5000).hide(0);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

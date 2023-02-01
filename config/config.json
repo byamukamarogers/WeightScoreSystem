@@ -1,0 +1,26 @@
+{
+    "dev": {
+        "dbname": "hcare_prod",
+        "host": "localhost",
+        "user": "postgres",
+        "password": "root",
+        "port": 5432,
+        "dialect": "postgres"
+    },
+    "prod": {
+        "dbname": "hcare_dev",
+        "host": "localhost",
+        "user": "postgres",
+        "password": "root",
+        "port": 5432,
+        "dialect": "postgres"
+    },
+    "test": {
+        "dbname": "hcare_dev",
+        "host": "localhost",
+        "user": "postgres",
+        "password": "root",
+        "port": 5432,
+        "dialect": "postgres"
+    }
+}

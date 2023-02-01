@@ -1,0 +1,7 @@
+node_modules/
+public/build/
+package-lock.json
+.env
+*.zip
+public/*.log
+
