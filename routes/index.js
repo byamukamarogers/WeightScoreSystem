@@ -39,5 +39,15 @@ module.exports = function () {
     res.sendFile(path.join(__dirname, "../public/student", "student.html"));
   });
 
+  router.get("/addprogram", function (req, res, next) {
+    //loader here.
+    res.sendFile(path.join(__dirname, "../public/programs", "programs.html"));
+  });
+
+  router.get("/program", function (req, res, next) {
+    //loader here.
+    res.sendFile(path.join(__dirname, "../public/programs", "addprograms.html"));
+  });
+
   return router;
 };
