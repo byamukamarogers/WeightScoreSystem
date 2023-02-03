@@ -7,16 +7,12 @@ let dbpassword = process.env.DBPASSWORD
 let dbport = process.env.DBPORT;
 let dbdailect = process.env.DBDIALECT
 module.exports.Sequelize = Sequelize;
-let conn = new Sequelize(dbname, dbuser, dbpassword, {
-    host: dbhost,
-    port: dbport,
-    dialect: 'postgres',
+
+let conn = new Sequelize({
+    dialect: 'sqlite',
+    storage: 'db/database.sqlite',
     logging: false,
     omitNull: true,
-    dialectOptions: {
-        useUTC: false
-    },
-    timezone: '+03',
     pool: {
         max: 5,
         min: 0,
