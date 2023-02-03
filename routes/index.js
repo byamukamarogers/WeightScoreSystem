@@ -28,9 +28,15 @@ module.exports = function () {
     //loader here.
     res.sendFile(path.join(__dirname, "../public", "index.html"));
   });
-  router.get("/subject", function (req, res, next) {
+
+  router.get("/subjects", function (req, res, next) {
     //loader here.
     res.sendFile(path.join(__dirname, "../public/Subject", "Subject.html"));
+  });
+
+  router.get("/register", function (req, res, next) {
+    //loader here.
+    res.sendFile(path.join(__dirname, "../public/student", "student.html"));
   });
 
   return router;
