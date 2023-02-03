@@ -12,9 +12,21 @@ module.exports = function (sequelize, DataTypes) {
             field: 'programName',
             allowNull: false
         },
+
         description: {
             type: DataTypes.TEXT,
             field: 'description'
+        },
+        maxWeights: {
+            type: DataTypes.DECIMAL,
+            field: 'maxweights',
+            allowNull: false
+        },
+        maxNoOfStudents: {
+            type: DataTypes.INTEGER,
+            field: 'maxnoofstudents',
+            defaultValue: 10,
+            allowNull: false
         },
         createdBy: {
             type: DataTypes.INTEGER,

@@ -1,9 +1,9 @@
 "use strict";
 module.exports = function (sequelize, DataTypes) {
-    var Result = sequelize.define('Result', {
-        resultId: {
+    var Application = sequelize.define('Application', {
+        applicationId: {
             type: DataTypes.INTEGER,
-            field: 'resultid',
+            field: 'applicationid',
             primaryKey: true,
             autoIncrement: true
         },
@@ -12,26 +12,16 @@ module.exports = function (sequelize, DataTypes) {
             field: 'studentid',
             allowNull: false
         },
-        subjectId: {
+        programId: {
             type: DataTypes.INTEGER,
-            field: 'subjectid',
+            field: 'programid',
             allowNull: false
         },
-        mark: {
-            type: DataTypes.DECIMAL,
-            field: 'mark',
-            defaultValue: 0.0,
+        dateReceived: {
+            type: DataTypes.DATE,
+            field: 'datereceived',
+            defaultValue: new Date(),
             allowNull: true
-        },
-        grade: {
-            type: DataTypes.STRING(10),
-            field: 'grade',
-            allowNull: false
-        },
-        gradeValue: {
-            type: DataTypes.INTEGER,
-            field: 'gradevalue',
-            allowNull: false
         },
         createdBy: {
             type: DataTypes.INTEGER,
@@ -46,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
         {
             underscored: true,
             timestamps: true,
-            tableName: 'results'
+            tableName: 'applications'
         });
-    return Result;
+    return Application;
 }
