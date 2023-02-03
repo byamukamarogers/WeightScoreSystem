@@ -18,20 +18,24 @@
                 <div class="card">
                     <form>
                         <div class="card-header">
-                            Grade Form
+                            Programs Form
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="gradeid">Grade ID:</label>
-                                <input type="text" class="form-control" id="gradeid" name="grade">
+                                <label for="programid">Program ID:</label>
+                                <input type="text" class="form-control" id="programid" name="programid">
                             </div>
                             <div class="form-group">
-                                <label for="grade">Grade:</label>
-                                <input type="text" class="form-control" id="grade" name="grade">
+                                <label for="program">Program:</label>
+                                <input type="text" class="form-control" id="program" name="program">
                             </div>
                             <div class="form-group">
-                                <label for="gradevalue">Grade Value:</label>
-                                <input type="number" class="form-control" id="gradevalue" name="gradevalue">
+                                <label for="minweights">Min weights:</label>
+                                <input type="number" class="form-control" id="minweights" name="minweights">
+                            </div>
+                            <div class="form-group">
+                                <label for="maxstudents">Max Students:</label>
+                                <input type="number" class="form-control" id="maxstudents" name="maxstudents">
                             </div>
                         </div>
                         <div class="card-footer">
@@ -41,14 +45,16 @@
                     </form>
                 </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-7">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Grade</th>
-                            <th scope="col">Description</th>
+                            <th scope="col">Program ID</th>
+                            <th scope="col">Program</th>
+                            <th scope="col">Min weights</th>
+                            <th scope="col">Max students</th>
                             <th scope="col" width="150">Action</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -56,15 +62,22 @@
                             <th scope="row">2</th>
                             <td>Jacob</td>
                             <td>Thornton</td>
-                            <td>
-                                <button type="submit" class="btn btn-info">Edit</button>
-                                <button type="reset" class="btn btn-danger">Delete</button>
-                            </td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th scope="row">3</th>
                             <td>Larry</td>
                             <td>the Bird</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td></td>
+                        </tr>  
+                        <tr>  
+                            <th scope="row">5</th>
                             <td class="flex">
                                 <button type="submit" class="btn btn-info">Edit</button>
                                 <button type="reset" class="btn btn-danger">Delete</button>
