@@ -48,6 +48,14 @@ module.exports = function () {
     //loader here.
     res.sendFile(path.join(__dirname, "../public/programs", "programs.html"));
   });
+  router.get("/apply", function (req, res, next) {
+    //loader here.
+    res.sendFile(path.join(__dirname, "../public/applications", "application.html"));
+  });
+  router.get("/applications", function (req, res, next) {
+    //loader here.
+    res.sendFile(path.join(__dirname, "../public/applications", "applicationlist.html"));
+  });
 
   return router;
 };
