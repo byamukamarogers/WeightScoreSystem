@@ -41,12 +41,12 @@ module.exports = function () {
 
   router.get("/addprogram", function (req, res, next) {
     //loader here.
-    res.sendFile(path.join(__dirname, "../public/programs", "programs.html"));
+    res.sendFile(path.join(__dirname, "../public/programs", "addprograms.html"));
   });
 
   router.get("/program", function (req, res, next) {
     //loader here.
-    res.sendFile(path.join(__dirname, "../public/programs", "addprograms.html"));
+    res.sendFile(path.join(__dirname, "../public/programs", "programs.html"));
   });
 
   return router;
