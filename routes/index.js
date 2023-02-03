@@ -29,23 +29,6 @@ var smtpTransport = nodemailer.createTransport({
   }
 });
 
-const serverConfig = {
-  timeout: 3000, //timeout connecting to each server, each try
-  retries: 2, //number of retries to do before failing
-  domain: "https://system.kautharmedicalcentre.com", //the domain to check DNS record of
-};
-/** File Upload Section */
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "_" + file.originalname);
-  }
-});
-
-var upload = multer({ storage: storage });
-
 //SEQUELIZE TRANSACTION
 const config = require("../config");
 const { User } = require("../models");
