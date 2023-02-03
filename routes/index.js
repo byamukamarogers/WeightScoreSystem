@@ -16,38 +16,7 @@ const nodemailer = require("nodemailer");
 const checkInternetConnected = require("check-internet-connected");
 const ical = require('ical-generator');
 
-const Flutterwave = require('flutterwave-node-v3');
 
-const flw = new Flutterwave(process.env.FLUTTERWAVE_PUBLIC, process.env.FLUTTERWAVE_SECRET);
-
-
-var smtpTransport = nodemailer.createTransport({
-  pool: true,
-  host: "smtp.dreamhost.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: "system@kautharmedicalcentre.com",
-    pass: "jX92f6s*"
-  }
-});
-
-const serverConfig = {
-  timeout: 3000, //timeout connecting to each server, each try
-  retries: 2, //number of retries to do before failing
-  domain: "https://system.kautharmedicalcentre.com", //the domain to check DNS record of
-};
-/** File Upload Section */
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "_" + file.originalname);
-  }
-});
-
-var upload = multer({ storage: storage });
 
 //SEQUELIZE TRANSACTION
 const config = require("../config");
@@ -677,96 +646,6 @@ module.exports = function () {
     }
   });
 
-  router.post("/appointments", auth.authenticate, async function (req, res) {
-    let data = req.body;
-    try {
-      data.healthUnitId = req.session.passport.user.healthUnitId;
-      data.clinicianId = data.staffId;
-      let client = await models.Client.findOne({ where: { clientId: data.clientId } });
-      let clientFullName = client.dataValues.firstName + " " + client.dataValues.lastName + " " + client.dataValues.otherName;
-      let staff = await models.Staff.findOne({ where: { staffId: data.staffId } });
-      let staffFullName = staff.dataValues.firstName + " " + staff.dataValues.lastName;
-      data.startTime = moment(data.bookingDate).format('L').toString() + " " + moment(data.bookingTime).format('LT').toString();
-      data.endTime = moment(data.startTime).add(data.appointmentDuration, 'h');
-
-      function getIcalObjectInstance(starttime, endtime, summary, description, location, url, name, email) {
-        const cal = ical({ domain: "kautharmedicalcentre.com", name: 'APPOINTMENTS CALENDAR' });
-        //cal.domain("mytestwebsite.com");
-        let alarmtime = moment(starttime).subtract(10, 'm');
-        cal.createEvent({
-          start: new Date(starttime),
-          end: new Date(endtime),
-          summary: summary,
-          description: description,
-          location: location,
-          url: url,
-          organizer: {
-            name: name,
-            email: email
-          },
-          alarms: [
-            {
-              type: 'display',
-              trigger: alarmtime,
-              repeat: 2,
-              interval: 5
-            }
-          ]
-        });
-        return cal;
-      }
-
-      async function sendemail(sendto, subject, htmlbody, calendarObj = null) {
-        mailOptions = {
-          from: "system@kautharmedicalcentre.com",
-          to: sendto,
-          subject: subject,
-          html: htmlbody
-        }
-        if (calendarObj) {
-          let alternatives = {
-            "Content-Type": "text/calendar",
-            "method": "REQUEST",
-            "content": new Buffer(calendarObj.toString()),
-            "component": "VEVENT",
-            "Content-Class": "urn:content-classes:calendarmessage"
-          }
-          mailOptions['alternatives'] = alternatives;
-          mailOptions['alternatives']['contentType'] = 'text/calendar'
-          mailOptions['alternatives']['content'] = new Buffer(calendarObj.toString())
-        }
-        smtpTransport.sendMail(mailOptions, function (error, response) {
-          if (error) {
-            console.log(error);
-            logError(error, req)
-          } else {
-            console.log("Message sent: ", response);
-          }
-        })
-      }
-      var emailObj = getIcalObjectInstance(moment(data.startTime), moment(data.endTime), "Doctor's Appointment", data.notes, "location", "https://twixconsult.ug", staffFullName, staff.email);
-      sendemail([client.email, staff.email], "Doctor's Appointment", "<h1>Doctor's Appointment</h1>", emailObj);
-
-      data.bookingTime = moment(data.bookingTime).format('LT');
-      data.bookingDate = moment(data.bookingDate).format('L');
-      if (data.bookingId) {
-        data.updatedBy = req.session.passport.user.staffId;
-        data.dateUpdated = new Date();
-        let result = await models.Booking.update(data, { where: { bookingId: data.bookingId } });
-        res.json({ success: true });
-      } else {
-        data.createdBy = req.session.passport.user.staffId;
-        data.createdDate = new Date();
-        data.endTime = moment(data.endTime).format('LT');
-        let result = await models.Booking.create(data);
-        res.json({ success: true });
-      }
-    } catch (err) {
-      res.status(400).json({ success: false, message: "Error, Try Again or Contact Support." });
-      console.log(err);
-      logError(err, req);
-    }
-  });
 
   router.get("/admissiontypes", auth.authenticate, async function (req, res) {
     try {
@@ -1134,7 +1013,7 @@ module.exports = function () {
     }
   });
 
-  router.post("/staffmember", auth.authenticate, upload.single("photo"), async function (req, res) {
+  router.post("/staffmember", async function (req, res) {
     let rawdata = req.body;
     rawdata.healthUnitId = req.session.passport.user.healthUnitId;
     let data = {};
@@ -1143,25 +1022,6 @@ module.exports = function () {
         if (rawdata[key] !== "") {
           data[key] = rawdata[key];
         }
-      }
-
-      let photo = req.file;
-      function imageToDataURL(imagePath) {
-        // read the binary data of the image
-        const imageData = fs.readFileSync(imagePath);
-
-        // convert the image data to a base64 string
-        const imageBase64 = imageData.toString('base64');
-
-        // get the MIME type of the image
-        const mimeType = imagePath.match(/\.([^.]+)$/)[1];
-
-        // return the data URL
-        return `data:image/${mimeType};base64,${imageBase64}`;
-      }
-      if (photo) {
-        const dataURL = imageToDataURL(photo.path);
-        data.profilePhoto = dataURL
       }
 
       let result;
@@ -1308,7 +1168,7 @@ module.exports = function () {
     }
   });
 
-  router.post("/client", auth.authenticate, upload.single("photo"), async function (req, res) {
+  router.post("/client", auth.authenticate, async function (req, res) {
     let rawdata = req.body;
     let data = {};
     let photo = req.file;
@@ -1918,59 +1778,6 @@ module.exports = function () {
     }
   });
 
-  router.post("/healthunits", auth.authenticate, upload.single("photo"), async function (req, res) {
-    let rawdata = req.body;
-    let data = {};
-    let result;
-    try {
-      for (key in rawdata) {
-        if (rawdata[key] !== "") {
-          data[key] = rawdata[key];
-        }
-      }
-      let photo = req.file;
-      function imageToDataURL(imagePath) {
-        // read the binary data of the image
-        const imageData = fs.readFileSync(imagePath);
-
-        // convert the image data to a base64 string
-        const imageBase64 = imageData.toString('base64');
-
-        // get the MIME type of the image
-        const mimeType = imagePath.match(/\.([^.]+)$/)[1];
-
-        // return the data URL
-        return `data:image/${mimeType};base64,${imageBase64}`;
-      }
-      if (photo) {
-        const dataURL = imageToDataURL(photo.path);
-        data.companyLogo = dataURL
-      }
-      if (data.healthUnitId) {
-        data.dateUpdated = new Date()
-        data.updatedBy = req.session.passport.user.fullName;
-        result = await models.HealthUnit.update(data, {
-          where: { healthUnitId: data.healthUnitId },
-        });
-      } else {
-        data.createdBy = req.session.passport.user.fullName;
-        result = await models.HealthUnit.create(data);
-      }
-
-      res.status(200).json({
-        success: true,
-        message: "Data Saved Successfully"
-      });
-    } catch (err) {
-      res.status(400).json({
-        success: false,
-        message: "Error, Try Again or Contact Support."
-      }
-      );
-      console.log(err);
-      logError(err, req)
-    }
-  });
 
   router.post("/clientvitals", auth.authenticate, async function (req, res) {
     let rawdata = req.body;
@@ -6360,51 +6167,5 @@ module.exports = function () {
     }
   });
 
-  router.post("/imageupload", auth.authenticate, upload.single("photo"), async function (req, res, next) {
-    let rawdata = req.body;
-    let imageName = req.file.filename;
-    let imageType = req.file.mimetype;
-    try {
-      rawdata.staffId = req.session.passport.user.staffId;
-      let imgUp = await models.InvestigationImage.create({
-        staffId: rawdata.staffId,
-        visitId: rawdata.visitId,
-        image: imageName,
-        imageType: imageType,
-        description: rawdata.description,
-      });
-      let serverResponse = false;
-      if (imgUp) { serverResponse = true; }
-      res.send({ status: "OK", success: serverResponse });
-    } catch (error) {
-      logError(error, req);
-    }
-  });
-
-  router.get("/imageupload", auth.authenticate, async function (req, res, next) {
-    let visitId = req.query.visitId;
-    let result;
-    try {
-      if (!isNaN(visitId)) {
-        result = await models.InvestigationImage.findAll({
-          where: { visitId: visitId },
-        });
-      } else {
-        result = await models.InvestigationImage.findAll();
-      }
-      if (result) {
-        for (let i = 0; i < result.length; i++) {
-          var img = fs.readFileSync("uploads/" + result[i].dataValues.image);
-          var encode_image = img.toString("base64");
-          result[i].dataValues.imageData = new Buffer(encode_image, "base64");
-        }
-        res.send(result);
-      } else {
-        res.send(result);
-      }
-    } catch (error) {
-      logError(error, req)
-    }
-  });
   return router;
 };
