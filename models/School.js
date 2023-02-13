@@ -3,7 +3,7 @@ module.exports = function (sequelize, DataTypes) {
     var School = sequelize.define('School', {
         schoolId: {
             type: DataTypes.INTEGER,
-            field: 'subjectid',
+            field: 'schoolid',
             primaryKey: true,
             autoIncrement: true
         },
