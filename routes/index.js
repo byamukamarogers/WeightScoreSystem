@@ -54,7 +54,7 @@ module.exports = function () {
   });
   router.get("/applications", function (req, res, next) {
     //loader here.
-    res.sendFile(path.join(__dirname, "../public/applications", "applicationlist.html"));
+    res.sendFile(path.join(__dirname, "../public/applications", "applicationlist.html"))});
   router.get("/schools", async function (req, res, next) {
     //loader here.
     let data;
@@ -160,4 +160,4 @@ module.exports = function () {
 
   return router;
 };
-};
+
