@@ -68,16 +68,18 @@ module.exports = function () {
   router.post("/student", async function (req, res, next) {
     //loader here.
     let data = req.body;
-    console.log(data)
+    console.log(data);
     try {
       await sequelize.transaction(async (t) => {
         let student = await models.Student.create(data, { transaction: t });
 
         let choices = data.choices;
+        let choiceLevel = 0;
         for (let i = 0; i < choices.length; i++) {
+          choiceLevel += 1;
           if (!isNaN(parseInt(choices[i]))) {
             await models.Choice.create(
-              { studentId: student.studentId, schoolId: choices[i] },
+              { studentId: student.studentId, schoolId: choices[i], choiceLevel: choiceLevel },
               { transaction: t }
             );
           }
@@ -116,6 +118,37 @@ module.exports = function () {
   router.get("/admissionlist", async function (req, res, next) {
 
     res.sendFile(path.join(__dirname, "../public/AdmissionList", "AdmissionList.html"));
+  });
+
+  router.get("/admissions", async function (req, res, next) {
+    let schoolId = req.query.schoolId
+    let data;
+    try {
+      if (!isNaN(parseInt(schoolId))) {
+        let school = await models.School.findOne({ where: { schoolId: schoolId } })
+        data = await models.Choice.findAll({
+          include: [
+            models.Student,
+            {
+              model: models.School,
+              where: { schoolId: schoolId }
+            }
+          ],
+          order: [
+            [models.School, 'schoolName', 'ASC'],
+            ['choiceLevel', 'ASC'],
+            [models.Student, 'aggregate', 'ASC']
+          ],
+          limit: school.noOfStudents
+        })
+      }
+      res.status(200).json({
+        success: true,
+        data: data
+      })
+    } catch (error) {
+      console.log(error)
+    }
   });
 
   return router;
