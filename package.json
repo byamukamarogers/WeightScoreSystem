@@ -36,5 +36,17 @@
     "tedious": "^2.7.1",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1"
-  }
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byamukamarogers/WeightScoreSystem.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/byamukamarogers/WeightScoreSystem/issues"
+  },
+  "homepage": "https://github.com/byamukamarogers/WeightScoreSystem#readme",
+  "description": ""
 }
