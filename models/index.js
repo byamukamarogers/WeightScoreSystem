@@ -12,8 +12,8 @@ db.Student = sequelize.import('./Student');
 db.Choice = sequelize.import('./Choice');
 db.AdmissionList = sequelize.import('./AdmissionList');
 
-/*
-sequelize.sync({ alter: true })
+
+/*sequelize.sync({ alter: true })
     .then(() => {
         console.log(`Tables Altered!`)
     })*/

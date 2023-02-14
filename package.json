@@ -42,11 +42,12 @@
     "type": "git",
     "url": "git+https://github.com/byamukamarogers/WeightScoreSystem.git"
   },
-  "author": "",
+  "author": "ray",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/byamukamarogers/WeightScoreSystem/issues"
   },
   "homepage": "https://github.com/byamukamarogers/WeightScoreSystem#readme",
-  "description": ""
+  "description": "grading",
+  "devDependencies": {}
 }
