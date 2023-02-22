@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <title>WCP</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-lg  bg-success" style="color: white !important;">
+        <a class="navbar-brand" href="/">LOGO</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">HOME <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">APPLY</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admissionlist">VIEW ADMISSIONS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/schoollist">VIEW SCHOOLS</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="card">
+                    <form id="my-form">
+                        <div class="card-header"> REGISTER NEW SCHOOL </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="schoolname" class="col-sm-3 col-form-label">School Name:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="schoolname" name="schoolname">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="cuttoffpoints" class="col-sm-3 col-form-label">Cut off Point</label>
+                                <div class="col-sm-9">
+                                    <input type="number" required maxlength=2 max="72" min="8" class="form-control"
+                                        id="cuttoffpoints" name="cuttoffpoints">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="maxNoOfStudents" class="col-sm-3 col-form-label">Max Number Of
+                                    Students</label>
+                                <div class="col-sm-9">
+                                    <input type="number" required maxlength=2 max="72" min="8" class="form-control"
+                                        id="maxNoOfStudents" name="maxNoOfStudents">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="reset" class="btn btn-warning">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <table id="my-table" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">School</th>
+                            <th scope="col">Cut Off Points</th>
+                            <th scope="col">Max No. Students</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#my-form").submit(function (event) {
+                event.preventDefault();
+                var formData = {
+                    schoolName: $("input[name='schoolname']").val(),
+                    cutOffPoints: $("input[name='cuttoffpoints']").val(),
+                    noOfStudents: $("input[name='maxNoOfStudents']").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/school",
+                    data: formData,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log("Data submitted successfully");
+                        getSchool();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            function getSchool() {
+                $.ajax({
+                    type: "GET",
+                    url: "/schools",
+                    dataType: "json",
+                    success: function (data) {
+                        $.each(data.data, function (index, item) {
+                            $("#my-table tbody").append(
+                                "<tr>" +
+                                "<td>" + item.schoolId + "</td>" +
+                                "<td>" + item.schoolName + "</td>" +
+                                "<td>" + item.cutOffPoints + "</td>" +
+                                "<td>" + item.noOfStudents + "</td>" +
+                                "</tr>"
+                            );
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            };
+            getSchool();
+
+        });
+
+    </script>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

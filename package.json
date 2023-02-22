@@ -24,6 +24,7 @@
     "moment": "^2.27.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
+    "mysql2": "^3.1.2",
     "nodemailer": "^6.6.1",
     "nodemon": "^2.0.4",
     "passport": "^0.4.1",
@@ -35,5 +36,18 @@
     "tedious": "^2.7.1",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1"
-  }
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byamukamarogers/WeightScoreSystem.git"
+  },
+  "author": "ray",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/byamukamarogers/WeightScoreSystem/issues"
+  },
+  "homepage": "https://github.com/byamukamarogers/WeightScoreSystem#readme",
+  "description": "grading",
+  "devDependencies": {}
 }
